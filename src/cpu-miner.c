@@ -136,6 +136,7 @@ bool opt_stratum_stats = false;
 
 uint32_t accepted_count = 0L;
 uint32_t rejected_count = 0L;
+int start_time = 0;
 double *thr_hashrates;
 double *thr_hashcount;
 double global_hashcount = 0;
@@ -153,7 +154,7 @@ uint64_t net_blocks = 0;
   uint32_t opt_work_size = 0;
   char *opt_api_allow = NULL;
   int opt_api_remote = 0;
-  int opt_api_listen = 4048; 
+  int opt_api_listen = 4048;
 
   pthread_mutex_t rpc2_job_lock;
   pthread_mutex_t rpc2_login_lock;
@@ -724,6 +725,14 @@ static int share_result( int result, struct work *work, const char *reason )
    char rate_s[8] = {0};
    int i;
 
+   //result rate
+   float result_rate = 0;
+   char rr[8];
+
+   //temperature
+   int temp;
+   char temp_s[8];
+
    pthread_mutex_lock(&stats_lock);
    for (i = 0; i < opt_n_threads; i++)
    {
@@ -731,12 +740,13 @@ static int share_result( int result, struct work *work, const char *reason )
        hashrate += thr_hashrates[i];
    }
    result ? accepted_count++ : rejected_count++;
+
    pthread_mutex_unlock(&stats_lock);
    global_hashcount = hashcount;
    global_hashrate = hashrate;
    total_submits = accepted_count + rejected_count;
 
-   rate = ( result ? ( 100. * accepted_count / total_submits )  
+   rate = ( result ? ( 100. * accepted_count / total_submits )
                    : ( 100. * rejected_count / total_submits ) );
 
    if (use_colors)
@@ -744,7 +754,7 @@ static int share_result( int result, struct work *work, const char *reason )
    else
         sres = (result ? "Accepted" : "Rejected" );
 
-   // Contrary to rounding convention 100% means zero rejects, exactly 100%. 
+   // Contrary to rounding convention 100% means zero rejects, exactly 100%.
    // Rates > 99% and < 100% (rejects>0) display 99.9%.
    if ( result )
    {
@@ -781,15 +791,38 @@ static int share_result( int result, struct work *work, const char *reason )
       sprintf(hr, "%.2f", hashrate );
    }
 
+   // calculates how much results has been got per minute
+   if (start_time == 0){
+     start_time = time(NULL);
+   }
+   else{
+     float a = (accepted_count + rejected_count) * 60;
+     float b = time(NULL) - start_time;
+     result_rate = a / b;
+   }
+   if (result_rate > 0){
+     sprintf(rr, "%.1f", result_rate );
+   }
+   else{
+     sprintf(rr, "?");
+   }
+
 #if ((defined(_WIN64) || defined(__WINDOWS__)))
-   applog( LOG_NOTICE, "%s %lu/%lu (%s%%), %s %sH, %s %sH/s",
+   applog( LOG_NOTICE, "%s %lu/%lu (%s%%), %s shares/min, %s %sH, %s %sH/s",
                        sres, ( result ? accepted_count : rejected_count ),
-                       total_submits, rate_s, hc, hc_units, hr, hr_units );
+                       total_submits, rate_s, rr, hc, hc_units, hr, hr_units );
 #else
-   applog( LOG_NOTICE, "%s %lu/%lu (%s%%), %s %sH, %s %sH/s, %dC",
+   temp = (uint32_t)cpu_temp(0);
+   if (temp > 0){
+     sprintf(temp_s, "%d", temp);
+   }
+   else{
+     sprintf(temp_s, "?");
+   }
+   applog( LOG_NOTICE, "%s %lu/%lu (%s%%), %s shares/min, %s %sH, %s %sH/s, %sC",
                        sres, ( result ? accepted_count : rejected_count ),
-                       total_submits, rate_s, hc, hc_units, hr, hr_units,
-                       (uint32_t)cpu_temp(0) );
+                       total_submits, rate_s, rr, hc, hc_units, hr, hr_units,
+                       temp_s );
 #endif
 
    if (reason)
@@ -867,11 +900,11 @@ bool std_submit_getwork_result( CURL *curl, struct work *work )
       applog(LOG_ERR, "submit_upstream_work OOM");
       return false;
    }
-   // build JSON-RPC request 
+   // build JSON-RPC request
    snprintf( req, JSON_BUF_LEN,
      "{\"method\": \"getwork\", \"params\": [\"%s\"], \"id\":4}\r\n", gw_str );
    free( gw_str );
-   // issue JSON-RPC request 
+   // issue JSON-RPC request
    val = json_rpc_call( curl, rpc_url, rpc_userpass, req, NULL, 0 );
    if ( unlikely(!val) )
    {
@@ -902,7 +935,7 @@ bool jr2_submit_getwork_result( CURL *curl, struct work *work )
        "\"id\":4}\r\n",
        rpc2_id, work->job_id, noncestr, hashhex );
    free( hashhex );
-   // issue JSON-RPC request 
+   // issue JSON-RPC request
    val = json_rpc2_call( curl, rpc_url, rpc_userpass, req, NULL, 0 );
    if (unlikely( !val ))
    {
@@ -1024,7 +1057,7 @@ static bool submit_upstream_work( CURL *curl, struct work *work )
        else
           share_result(json_is_null(res), work, json_string_value(res));
        json_decref(val);
-       return true;     
+       return true;
    }
    else
        return algo_gate.submit_getwork_result( curl, work );
@@ -1100,7 +1133,7 @@ start:
 			json_decref(val);
 			goto start;
 		}
-	} 
+	}
         else
 		rc = work_decode(json_object_get(val, "result"), work);
 
@@ -1309,7 +1342,7 @@ static bool get_work(struct thr_info *thr, struct work *work)
 		for ( int n = 0; n < 74; n++ ) ( (char*)work->data )[n] = n;
 
                 work->data[algo_gate.ntime_index] = swab32(ts);  // ntime
-  
+
               // this overwrites much of the for loop init
                 memset( work->data + algo_gate.nonce_index, 0x00, 52);  // nonce..nonce+52
 		work->data[20] = 0x80000000;  // extraheader not used for jr2
@@ -1501,7 +1534,7 @@ void std_get_new_work( struct work* work, struct work* g_work, int thr_id,
                      uint32_t *end_nonce_ptr, bool clean_job )
 {
    uint32_t *nonceptr = algo_gate.get_nonceptr( work->data );
-   
+
    if ( memcmp( work->data, g_work->data, algo_gate.work_cmp_size )
       && ( clean_job || ( *nonceptr >= *end_nonce_ptr )
          || ( work->job_id != g_work->job_id ) ) )
@@ -1511,7 +1544,7 @@ void std_get_new_work( struct work* work, struct work* g_work, int thr_id,
      *nonceptr = 0xffffffffU / opt_n_threads * thr_id;
      if ( opt_randomize )
        *nonceptr += ( (rand() *4 ) & UINT32_MAX ) / opt_n_threads;
-     *end_nonce_ptr = ( 0xffffffffU / opt_n_threads ) * (thr_id+1) - 0x20; 
+     *end_nonce_ptr = ( 0xffffffffU / opt_n_threads ) * (thr_id+1) - 0x20;
    }
    else
        ++(*nonceptr);
@@ -1567,7 +1600,7 @@ static void *miner_thread( void *userdata )
    time_t   firstwork_time = 0;
    int  i;
    memset( &work, 0, sizeof(work) );
- 
+
    /* Set worker threads to nice 19 and then preferentially to SCHED_IDLE
     * and if that fails, then SCHED_BATCH. No need for this to be an
     * error if it fails */
@@ -1610,7 +1643,7 @@ static void *miner_thread( void *userdata )
    // CPU thread affinity
    if (num_cpus > 1)
    {
-      if (opt_affinity == -1 && opt_n_threads > 1) 
+      if (opt_affinity == -1 && opt_n_threads > 1)
       {
          if (opt_debug)
            applog( LOG_DEBUG, "Binding thread %d to cpu %d (mask %x)",
@@ -1744,7 +1777,7 @@ static void *miner_thread( void *userdata )
 		hashes_done / (diff.tv_sec + diff.tv_usec * 1e-6);
 	  pthread_mutex_unlock(&stats_lock);
        }
-       // if nonce found, submit work 
+       // if nonce found, submit work
        if ( nonce_found && !opt_benchmark )
        {
           if ( !submit_work(mythr, &work) )
@@ -2021,7 +2054,7 @@ bool jr2_stratum_handle_response( json_t *val )
     if ( !res_val && !err_val )
         return false;
     json_t *status = json_object_get( res_val, "status" );
-    if ( status ) 
+    if ( status )
     {
         const char *s = json_string_value( status );
         valid = !strcmp( s, "OK" ) && json_is_null( err_val );
@@ -2386,7 +2419,7 @@ void parse_arg(int key, char *arg )
 	case 'c': {
 		json_error_t err;
 		json_t *config;
-                
+
 		if (arg && strstr(arg, "://"))
 			config = json_load_url(arg, &err);
                 else
@@ -2765,13 +2798,17 @@ static int thread_create(struct thr_info *thr, void* func)
 
 static void show_credits()
 {
-	printf("\n         **********  "PACKAGE_NAME" "PACKAGE_VERSION"  *********** \n");
+	      printf("\n         **********  "PACKAGE_NAME" "PACKAGE_VERSION"  *********** \n");
         printf("     A CPU miner with multi algo support and optimized for CPUs\n");
         printf("     with AES_NI and AVX extensions.\n");
-	printf("     BTC donation address: 12tdvfF7KmAsihBXQXynT6E6th2c2pByTT\n");
-        printf("     Forked from TPruvot's cpuminer-multi with credits\n");
-        printf("     to Lucas Jones, elmad, palmd, djm34, pooler, ig0tik3d,\n");
+
+        printf("     Forked from Jay D Dee's cpuminer-opt with credits\n");
+        printf("     to TPruvot, Lucas Jones, elmad, palmd, djm34, pooler, ig0tik3d,\n");
         printf("     Wolf0, Jeff Garzik and Optiminer.\n\n");
+
+        printf("     If you WANT, you can pay me a coffee :)\n");
+        printf("     BTC: 1B9ZDrHDjVDXCazFAmApUSCXAsbQ1fn98h\n");
+        printf("     XMR: 45TVYqXTMTqgBfbjP1w2479Ey6j1dWHjjKnioM778jh4FTR587P6VmUb3mipA8hVfFYp7iBXYecJCHwqZtjj368x5wvjffg\n\n");
 }
 
 bool check_cpu_capability ()
@@ -2821,7 +2858,7 @@ bool check_cpu_capability ()
 
      cpu_brand_string( cpu_brand );
      printf( "CPU: %s\n", cpu_brand );
-     
+
      printf("CPU features:");
      if ( cpu_has_sse2 ) printf( " SSE2" );
      if ( cpu_has_aes  ) printf( " AES"  );
