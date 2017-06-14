@@ -13,8 +13,17 @@ UBUNTU (and Debian based distributions)
 ---------------------------------------
 - Make sure you are connected to the internet
 - Run the compile-ubuntu.sh file.
+- The script will ask you to enter the sudo password to install the dependencies packages.
 
 $ ./compile-ubuntu.sh
+
+FEDORA (and based distributions)
+---------------------------------------
+- Make sure you are connected to the internet
+- Run the compile-fedora.sh file.
+- The script will ask you to enter the sudo password to install the dependencies packages.
+
+$ ./compile-fedora.sh
 
 LINUX (any distribution)
 ---------------------------------------
@@ -122,8 +131,8 @@ algoritms for CPUs with AVX and AVX2, Sandybridge and Haswell respectively.
 Older CPUs are supported by cpuminer-multi by TPruvot but at reduced
 performance.
 
-2. 64 bit Ubuntu and Debian based distributions linux.
-This fork is spefic for Ubuntu Linux but must work with any other Debian based distribution as well.
+2. 64 bit Linux distributions linux.
+This fork is spefic for Linux distributions.
 Others SO are supported by cpuminer-opt by Jay D Dee.
 
 3. Stratum pool, cpuminer-opt only supports stratum minning. Some algos
