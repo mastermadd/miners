@@ -144,8 +144,8 @@ Donations
 
 If you WANT, you can pay me a coffee ;)
 
-BTC: 1B9ZDrHDjVDXCazFAmApUSCXAsbQ1fn98h
-
-XMR: 45TVYqXTMTqgBfbjP1w2479Ey6j1dWHjjKnioM778jh4FTR587P6VmUb3mipA8hVfFYp7iBXYecJCHwqZtjj368x5wvjffg
+- BTC: 1B9ZDrHDjVDXCazFAmApUSCXAsbQ1fn98h
+- XMR: 45TVYqXTMTqgBfbjP1w2479Ey6j1dWHjjKnioM778jh4FTR587P6VmUb3mipA8hVfFYp7iBXYecJCHwqZtjj368x5wvjffg
+- XDN: dddG1nMJADodgxDLCugr6Nf1gAoNDGainhWEgnJjSHLKesFHjPu7TeKBQHUC9WySNpchTeT6EP3ppCmtoU11LGCV2bd2pGFAF
 
 Happy mining!
