@@ -6,7 +6,8 @@ echo "This script will make all the hard work for you."
 echo " "
 echo " "
 echo "Let's begin installing all dependencies we need to compile the cpuminer."
-sudo apt-get install automake autoconf pkg-config libcurl4-openssl-dev libjansson-dev libssl-dev libgmp-dev make g++
+
+sudo dnf install automake autoconf libcurl-devel jansson-devel openssl-devel gmp-devel make gcc-c++
 echo " "
 echo " "
 chmod +x compile-linux.sh
