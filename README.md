@@ -13,21 +13,21 @@ Build Instructions
 - Run the build-ubuntu.sh file.
 - The script will ask you to enter the sudo password to install the dependencies packages.
 
-$ ./build-ubuntu.sh
+$ `./build-ubuntu.sh`
 
 ### FEDORA (and based distributions)
 - Make sure you are connected to the internet
 - Run the build-fedora.sh file.
 - The script will ask you to enter the sudo password to install the dependencies packages.
 
-$ ./build-fedora.sh
+$ `./build-fedora.sh`
 
 ### LINUX (any distribution)
 - Make sure you all the following dependencies:
 automake autoconf pkg-config libcurl4-openssl-dev libjansson-dev libssl-dev libgmp-dev make g++
 - Run the build-linux.sh file.
 
-$ ./build-linux.sh
+$ `./build-linux.sh`
 
 
 How to Mine
@@ -36,7 +36,7 @@ How to Mine
 
 For example, to mine a cryptonight coin (Monero, Bytecoin, etc) using the minergate pool we could have something like that:
 
-$ ./cpuminer -a cryptonight -o stratum+tcp://xdn-xmr.pool.minergate.com:45790 -u your-email@mail.com -p x
+$ `./cpuminer -a cryptonight -o stratum+tcp://xdn-xmr.pool.minergate.com:45790 -u your-email@mail.com -p x`
 
 
 Interpreting the Results
