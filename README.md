@@ -8,24 +8,21 @@ All of the code is believed to be open and free.
 Build Instructions
 ------------------
 
-UBUNTU (and Debian based distributions)
----------------------------------------
+### UBUNTU (and Debian based distributions)
 - Make sure you are connected to the internet
 - Run the build-ubuntu.sh file.
 - The script will ask you to enter the sudo password to install the dependencies packages.
 
 $ ./build-ubuntu.sh
 
-FEDORA (and based distributions)
---------------------------------
+### FEDORA (and based distributions)
 - Make sure you are connected to the internet
 - Run the build-fedora.sh file.
 - The script will ask you to enter the sudo password to install the dependencies packages.
 
 $ ./build-fedora.sh
 
-LINUX (any distribution)
-------------------------
+### LINUX (any distribution)
 - Make sure you all the following dependencies:
 automake autoconf pkg-config libcurl4-openssl-dev libjansson-dev libssl-dev libgmp-dev make g++
 - Run the build-linux.sh file.
