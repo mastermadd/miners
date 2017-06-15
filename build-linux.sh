@@ -4,8 +4,8 @@ echo "It can take some minutes. Be patience!"
 echo " "
 echo " "
 cd src
-chmod +x build.sh
-./build.sh
+chmod +x build-linux.sh
+./build-linux.sh
 cd ..
 cp src/cpuminer cpuminer
 

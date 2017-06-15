@@ -1,7 +1,6 @@
-cpuminer-easy is a fork of cpuminer-opt by Jay D Dee.
+This software has been developped by Luis Vasquez
 
-This software has been developped by lucas Jones, TPruvot, djm34, Wolf0, pooler,
-Jeff garzik, ig0tik3d, elmad, palmd, Optiminer and Jay D Dee.
+Whit credits to Jay D Dee's, TPruvot, Lucas Jones, elmad, palmd, djm34, pooler, ig0tik3d, Wolf0, Jeff Garzik and Optiminer.
 
 All of the code is believed to be open and free.
 
@@ -12,26 +11,26 @@ Compile Instructions
 UBUNTU (and Debian based distributions)
 ---------------------------------------
 - Make sure you are connected to the internet
-- Run the compile-ubuntu.sh file.
+- Run the build-ubuntu.sh file.
 - The script will ask you to enter the sudo password to install the dependencies packages.
 
-$ ./compile-ubuntu.sh
+$ ./build-ubuntu.sh
 
 FEDORA (and based distributions)
 ---------------------------------------
 - Make sure you are connected to the internet
-- Run the compile-fedora.sh file.
+- Run the build-fedora.sh file.
 - The script will ask you to enter the sudo password to install the dependencies packages.
 
-$ ./compile-fedora.sh
+$ ./build-fedora.sh
 
 LINUX (any distribution)
 ---------------------------------------
 - Make sure you all the following dependencies:
 automake autoconf pkg-config libcurl4-openssl-dev libjansson-dev libssl-dev libgmp-dev make g++
-- Run the compile-linux.sh file.
+- Run the build-linux.sh file.
 
-$ ./compile-linux.sh
+$ ./build-linux.sh
 
 
 How to Mine

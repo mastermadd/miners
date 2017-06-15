@@ -7,8 +7,8 @@ echo " "
 echo " "
 echo "Let's begin installing all dependencies we need to compile the cpuminer."
 
-sudo dnf install automake autoconf libcurl-devel jansson-devel openssl-devel gmp-devel make gcc-c++
+sudo apt-get install automake autoconf pkg-config libcurl4-openssl-dev libjansson-dev libssl-dev libgmp-dev make g++
 echo " "
 echo " "
-chmod +x compile-linux.sh
-./compile-linux.sh
+chmod +x build-linux.sh
+./build-linux.sh

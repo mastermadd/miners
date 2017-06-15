@@ -1,12 +1,6 @@
 #!/bin/bash
 
-#if [ "$OS" = "Windows_NT" ]; then
-#    ./mingw64.sh
-#    exit 0
-#fi
-
 # Linux build
-
 make distclean || echo clean
 
 rm -f config.status
@@ -18,8 +12,24 @@ rm -f config.status
 # Debian 7.7 / Ubuntu 14.04 (gcc 4.7+)
 #extracflags="$extracflags -Ofast -flto -fuse-linker-plugin -ftree-loop-if-convert-stores"
 
-CFLAGS="-O3 -march=native -Wall" CXXFLAGS="$CFLAGS -std=gnu++11" ./configure --with-curl
+build(){
+	echo " "
+	clear
+  FLAGS="-O3 -march=$1 -mtune=$1 -Wall"
+	CFLAGS="$FLAGS" CXXFLAGS="$CFLAGS -std=gnu++11" ./configure --with-curl
+	make -j 4
 
-make -j 4
+  echo ""
+	echo "This build used:"
+	echo "CFLAGS: $FLAGS"
+}
+
+####################################################
+## TRYING TO COMPILE WITH THE MOST OPTIMIZED ARCH ##
+####################################################
+
+build native
+
+####################################################
 
 strip -s cpuminer

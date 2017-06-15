@@ -2802,13 +2802,14 @@ static void show_credits()
         printf("     A CPU miner with multi algo support and optimized for CPUs\n");
         printf("     with AES_NI and AVX extensions.\n");
 
-        printf("     Forked from Jay D Dee's cpuminer-opt with credits\n");
-        printf("     to TPruvot, Lucas Jones, elmad, palmd, djm34, pooler, ig0tik3d,\n");
-        printf("     Wolf0, Jeff Garzik and Optiminer.\n\n");
+        printf("     This software has been developped by Luis Vasquez\n");
+        printf("     With credits to Jay D Dee's, TPruvot, Lucas Jones, elmad, palmd,\n");
+        printf("     djm34, pooler, ig0tik3d, Wolf0, Jeff Garzik and Optiminer.\n\n");
 
-        printf("     If you WANT, you can pay me a coffee :)\n");
+        printf("     It's completelly free! But If you WANT, you can pay me a coffee :)\n");
         printf("     BTC: 1B9ZDrHDjVDXCazFAmApUSCXAsbQ1fn98h\n");
-        printf("     XMR: 45TVYqXTMTqgBfbjP1w2479Ey6j1dWHjjKnioM778jh4FTR587P6VmUb3mipA8hVfFYp7iBXYecJCHwqZtjj368x5wvjffg\n\n");
+        printf("     XMR: 45TVYqXTMTqgBfbjP1w2479Ey6j1dWHjjKnioM778jh4FTR587P6VmUb3mipA8hVfFYp7iBXYecJCHwqZtjj368x5wvjffg\n");
+        printf("     XDN: dddG1nMJADodgxDLCugr6Nf1gAoNDGainhWEgnJjSHLKesFHjPu7TeKBQHUC9WySNpchTeT6EP3ppCmtoU11LGCV2bd2pGFAF\n\n");
 }
 
 bool check_cpu_capability ()
