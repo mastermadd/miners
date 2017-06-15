@@ -5,8 +5,8 @@ Whit credits to Jay D Dee's, TPruvot, Lucas Jones, elmad, palmd, djm34, pooler, 
 All of the code is believed to be open and free.
 
 
-Compile Instructions
---------------------
+Build Instructions
+------------------
 
 UBUNTU (and Debian based distributions)
 ---------------------------------------
@@ -17,7 +17,7 @@ UBUNTU (and Debian based distributions)
 $ ./build-ubuntu.sh
 
 FEDORA (and based distributions)
----------------------------------------
+--------------------------------
 - Make sure you are connected to the internet
 - Run the build-fedora.sh file.
 - The script will ask you to enter the sudo password to install the dependencies packages.
@@ -25,7 +25,7 @@ FEDORA (and based distributions)
 $ ./build-fedora.sh
 
 LINUX (any distribution)
----------------------------------------
+------------------------
 - Make sure you all the following dependencies:
 automake autoconf pkg-config libcurl4-openssl-dev libjansson-dev libssl-dev libgmp-dev make g++
 - Run the build-linux.sh file.
