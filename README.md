@@ -34,11 +34,11 @@ automake autoconf pkg-config libcurl4-openssl-dev libjansson-dev libssl-dev libg
 $ ./compile-linux.sh
 
 
-How to Mining
--------------
+How to Mine
+------------
 - cpuminer -a [algoritm] -o [pool address] -u [username] -p [password]
 
-For example, to mining a cryptonight coin (Monero, Bytecoin, etc) using the minergate pool we could have something like that:
+For example, to mine a cryptonight coin (Monero, Bytecoin, etc) using the minergate pool we could have something like that:
 
 $ ./cpuminer -a cryptonight -o stratum+tcp://xdn-xmr.pool.minergate.com:45790 -u your-email@mail.com -p x
 
