@@ -1,4 +1,4 @@
-This software has been developped by Luis Vasquez
+This software has been developped by Luis Vasquez from a fork of https://github.com/JayDDee/cpuminer-opt.
 
 Whit credits to Jay D Dee's, TPruvot, Lucas Jones, elmad, palmd, djm34, pooler, ig0tik3d, Wolf0, Jeff Garzik and Optiminer.
 
